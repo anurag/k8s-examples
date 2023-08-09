@@ -24,12 +24,12 @@ import (
 
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
-	"github.com/xyproto/simpleredis"
+	simpleredis "github.com/xyproto/simpleredis/v2"
 )
 
 var (
-	masterPool *simpleredis.ConnectionPool
-	replicaPool  *simpleredis.ConnectionPool
+	masterPool  *simpleredis.ConnectionPool
+	replicaPool *simpleredis.ConnectionPool
 )
 
 func ListRangeHandler(rw http.ResponseWriter, req *http.Request) {
@@ -74,9 +74,11 @@ func HandleError(result interface{}, err error) (r interface{}) {
 }
 
 func main() {
-	masterPool = simpleredis.NewConnectionPoolHost("redis-master:6379")
+	redisPrimaryURL := os.Getenv("REDIS_PRIMARY_URL")
+	redisReplicaURL := os.Getenv("REDIS_REPLICA_URL")
+	masterPool = simpleredis.NewConnectionPoolHost(redisPrimaryURL)
 	defer masterPool.Close()
-	replicaPool = simpleredis.NewConnectionPoolHost("redis-replica:6379")
+	replicaPool = simpleredis.NewConnectionPoolHost(redisReplicaURL)
 	defer replicaPool.Close()
 
 	r := mux.NewRouter()

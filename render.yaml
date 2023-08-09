@@ -1,0 +1,7 @@
+previewsEnabled: true
+previewsExpireAfterDays: 7
+services:
+- type: web
+  name: guestbook-go
+  env: docker
+  rootDir: guestbook-go

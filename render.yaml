@@ -3,5 +3,27 @@ previewsExpireAfterDays: 7
 services:
 - type: web
   name: guestbook-go
-  env: docker
+  runtime: docker
   rootDir: guestbook-go
+  envVars:
+  - key: REDIS_PRIMARY_URL
+    fromService:
+      name: redis-primary
+      type: pserv
+      property: hostport
+  - key: REDIS_REPLICA_URL
+    fromService:
+      name: redis-replica
+      type: pserv
+      property: hostport
+- type: pserv
+  name: redis-primary
+  runtime: image
+  image:
+    url: registry.k8s.io/redis:e2e
+- type: pserv
+  name: redis-replica
+  runtime: image
+  numInstances: 2
+  image:
+    url: registry.k8s.io/redis-slave:v2

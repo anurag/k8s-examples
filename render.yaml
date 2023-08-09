@@ -24,7 +24,6 @@ services:
 - type: pserv
   name: redis-replica
   runtime: image
-  numInstances: 2
   image:
     url: renderco/k8s-redis-replica:v2
   envVars:

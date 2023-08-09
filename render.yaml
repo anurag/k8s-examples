@@ -27,3 +27,11 @@ services:
   numInstances: 2
   image:
     url: renderco/k8s-redis-replica:v2
+  envVars:
+  - key: GET_HOSTS_FROM
+    value: env
+  - key: REDIS_MASTER_SERVICE_HOST
+    fromService:
+      name: redis-primary
+      type: pserv
+      property: host
